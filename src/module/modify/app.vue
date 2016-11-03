@@ -1,32 +1,24 @@
 <template>
-<!-- <to-upload-photo title="房产证" value="点击拍摄|房产证" v-tap="getInfo(1)" v-if="houseInfo.local == null"></to-upload-photo>
-<img style="height:225px;width:calc(100% - 30px);margin-left:15px;" :src="houseInfo.local" v-if="houseInfo.local != null">
-<to-upload-photo style="margin-top:10px;" title="工资流水证明" value="点击拍摄|工资流水证明" v-tap="getInfo(2)" v-if="moneyInfo.local == null"></to-upload-photo>
-<img style="height:225px;width:calc(100% - 30px);margin-left:15px;margin-top:10px" :src="moneyInfo.local" v-if="moneyInfo.local != null">
-<x-button slot="right" :class="{'btn-active':isFilled()}" style="background-color:#e2e2e2;color:#fff;margin:20px 20px;width:calc( 100% - 40px )" v-tap="isFilled()?nextStep():return">提交</x-button>
-<j-tel></j-tel> -->
-<group title="请完成您的设计方案:">
-    <x-input :value.sync="order.plan.price" title="请输入方案价格" keyborad="number"></x-input>
-</group>
-<group title="请输入您的方案描述">
-    <x-textarea :value.sync="order.plan.description"></x-textarea>
-</group>
-<group title="您的方案已有的图片" v-if="order.plan.images.length!=0">
-    <div class="plan-image" v-for="image in order.plan.images">
-        <img class="image" :src="imgUrl + image">
-        <img src="./del.png" class="del" v-tap="delExist(image,$index)">
+<group title="门店" v-for="shop in order.subOrders" v-if="order.subOrders.length!==0" track-by="$index">
+    <div style="position:relative;">
+        <x-input title="门店Id" :value.sync="shop.store.id"></x-input>
+        <div class="del" slot="right"><img src="./del.png" v-tap="delShop($index)"></div>
     </div>
-</group>
-<group title="您即将上传的方案图片" v-if="addImages.length!=0">
-    <div class="plan-image" v-for="image in addImages">
-        <img class="image" :src="image.local">
-        <img src="./del.png" class="del" v-tap="delAdd($index)">
+    <div style="position:relative;" v-for="brand in shop.brands" v-if="shop.brands.length!==0" track-by="$index">
+        <x-input title="品牌名称" :value.sync="brand">
+        </x-input>
+        <div class="del" slot="right"><img src="./del.png" v-tap="delBrand($index,$parent.$index)"></div>
     </div>
+    <div style="position:relative;height:44px">
+        <div class="add"><img src="./add.png" v-tap="addBrand($index)"></div>
+    </div>
+    <x-input title="正价总额" :value.sync="shop.normalAmount">
+    </x-input>
+    <x-input title="特价总额" :value.sync="shop.specialAmount">
+    </x-input>
 </group>
-<group>
-    <j-to-upload-photo title="请上传您的方案图片" value="点击上传或拍摄您的|方案图片" v-tap="getInfo()"></j-to-upload-photo>
-</group>
-<div class="status-3-btn" v-tap="submit()">
+<div class="add-shop" v-tap="addShop()">点此增加一个门店</div>
+<div class="status-3-btn" :class="{'active':isFilled()}" v-tap="isFilled()?submit():return">
     <div class="btn-right">确认修改</div>
 </div>
 </template>
@@ -36,92 +28,70 @@ import Lib from 'assets/Lib.js'
 import Group from 'vux-components/group'
 import Cell from 'vux-components/cell'
 import XInput from 'vux-components/x-input'
-import XTextarea from 'vux-components/x-textarea'
-import JToUploadPhoto from 'components/JToUploadPhoto.vue'
 export default {
     data() {
         return {
-            addImages: [],
-            delImages: [],
             order: {},
-            imgUrl: Lib.C.imgUrl
         }
     },
     components: {
         Group,
         Cell,
         XInput,
-        XTextarea,
-        JToUploadPhoto
     },
     ready() {
-        this.$http.post(`${Lib.C.wxApi}qy/jsapiTicket`, location.href).then((res) => {
-            wxReady(res.data.data)
-        }, (res) => {
-            alert("网络连接失败，请刷新重试")
-            console.log(res.data.data)
-        })
-        this.$http.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
+        this.$http.get(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
             this.order = res.data.data
         }, (res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
     },
     methods: {
-        getInfo() {
-            let that = this
-            wx.chooseImage({
-                count: 1, // 默认9
-                sizeType: ['original', 'compressed'],
-                sourceType: ['camera', 'album'], // 可以指定来源是相册还是相机，默认二者都有
-                success: function(res) {
-                    let thisId = res.localIds[0]
-                    wx.uploadImage({
-                        localId: thisId, // 需要上传的图片的本地ID，由chooseImage接口获得
-                        isShowProgressTips: 1, // 默认为1，显示进度提示
-                        success: function(res) {
-                            var serverId = res.serverId // 返回图片的服务器端ID
-                            that.addImages.push({
-                                local: thisId,
-                                server: serverId
-                            })
-                        }
-                    })
-                }
+        delShop(index) {
+            this.order.subOrders.splice(index, 1)
+        },
+        delBrand(index, pIndex) {
+            this.order.subOrders[pIndex].brands.splice(index, 1)
+        },
+        addShop() {
+            this.order.subOrders.push({
+                store: {
+                    id: null
+                },
+                brands: [],
+                specialAmount: null,
+                normalAmount: null
             })
         },
-        delExist(imageName, index) {
-            this.delImages.push(imageName)
-            this.order.plan.images.splice(index, 1)
-        },
-        delAdd(index) {
-            this.addImages.splice(index, 1)
+        addBrand(pIndex) {
+            this.order.subOrders[pIndex].brands.push("")
         },
         submit() {
-            let upImg = []
-            this.addImages.map((e) => {
-                upImg.push(e.server)
+            let data = []
+            this.order.subOrders.map((e) => {
+                data.push({
+                    "storeId": e.store.id,
+                    "brands": e.brands,
+                    "normalAmount": e.normalAmount,
+                    "specialAmount": e.specialAmount
+                })
             })
-            this.$http.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`, {
-                "description": this.order.plan.description,
-                "price": Number(this.order.plan.price),
-                "deletedImages": this.delImages,
-                "newImages": [],
-                "newWechatImages": upImg
-            }).then((res) => {
-                alert("更新设计方案成功")
-                location.href = './index.html'
+            this.$http.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/uploadList`, JSON.stringify(data)).then((res) => {
+                alert("更新订单成功")
+                location.href = './zc-order.html?orderNo=${Lib.M.GetRequest().orderNo}'
             }, (res) => {
                 alert("网络连接失败，请重试")
             })
+        },
+        isFilled() {
+            if (this.order.subOrders.length == 0) return false
+            let shops = this.order.subOrders
+            for (let i = 0; i < shops.length; i++) {
+                if (shops[i].store.id == null || shops[i].specialAmount == null || shops[i].normalAmount == null) return false
+            }
+            return true
         }
     }
-}
-
-function wxReady(obj) {
-    obj.debug = false
-    obj.jsApiList = ["chooseImage", "previewImage", "uploadImage", "downloadImage"]
-    wx.config(obj)
 }
 </script>
 
@@ -157,9 +127,46 @@ body {
     border-radius: 2px;
     height: 44px;
     margin-top: 10px;
-    background-color: rgb(158, 188, 43);
+    background-color: #d8d8d8;
     color: #fff;
     line-height: 44px;
     text-align: center;
+}
+.active {
+    background-color: rgb(158, 188, 43)!important;
+}
+.del {
+    position: absolute;
+    right: 35px;
+    top: 11px;
+    height: 28px;
+    width: 28px;
+    img {
+        height: 100%;
+        width: 100%;
+    }
+}
+.add {
+    position: absolute;
+    right: 35px;
+    top: 11px;
+    height: 28px;
+    width: 28px;
+    img {
+        height: 100%;
+        width: 100%;
+    }
+}
+.add-shop {
+    height: 80px;
+    width: calc(~"100% - 30px");
+    margin-left: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    border: 1px solid #999;
+    line-height: 80px;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
 }
 </style>
