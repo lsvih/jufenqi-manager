@@ -10,7 +10,7 @@
     <swiper :index.sync="index" :height="getScreenHeight()+'px'" :show-dots="false">
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:wc>
+                <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:zx>
                     <div>
                         <div class="order" v-for="order in zxList" v-tap="viewDetail('zx',order.orderNo)">
                             <img :src="order.customerImage">
@@ -141,7 +141,7 @@ export default {
         this.index = (Lib.M.GetRequest().type - 1) || 0
         this.$http.get(`${Lib.C.orderApi}decorationOrders`, {
             params: {
-                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[7]`
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:7`
             }
         }).then((res) => {
             this.zxList = res.data.data
@@ -151,21 +151,30 @@ export default {
         })
         this.$http.get(`${Lib.C.mOrderApi}materialOrders`, {
             params: {
-                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[5,7]`
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`
             }
         }).then((res) => {
             res.data.data.map((e) => {
-                if (e.status == 7) {
-                    this.tkList.push(e)
-                } else {
-                    this.zcList.push(e)
-                }
+                this.zcList.push(e)
             })
             this.$refs.zx.reset()
+        }, (res) => {
+            alert("获取订单失败，请稍候再试QAQ")
+        })
+        this.$http.get(`${Lib.C.mOrderApi}materialSubOrders`, {
+            params: {
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`
+            }
+        }).then((res) => {
+            res.data.data.map((e) => {
+                this.tkList.push(e)
+            })
             this.$refs.tk.reset()
         }, (res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
+
+
     },
     methods: {
         getScreenHeight() {
