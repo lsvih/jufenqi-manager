@@ -105,9 +105,9 @@ export default {
     }
   },
   ready() {
-    this.$http.get(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
+    axios.get(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
       this.order = res.data.data
-    }, (res) => {
+    }).catch((res) => {
       alert("获取订单失败，请稍候再试QAQ")
     })
   },

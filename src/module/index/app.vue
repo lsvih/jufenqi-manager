@@ -174,7 +174,7 @@ export default {
             return Y + M + D
         },
         viewDetail(type, orderNo,planId) {
-            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}'`)
         }
     }
 }
