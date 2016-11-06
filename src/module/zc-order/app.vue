@@ -69,7 +69,7 @@
 <div class="status-3-btn" v-if="order.status == 1" v-tap="look()">已查看</div>
 <div class="status-3-btn" v-if="order.status == 2&&(!order.managerUploaded)" v-tap="modify()">去编辑</div>
 <div class="status-3-btn" v-if="order.status == 3" v-tap="pay()">用户已付款</div>
-<div class="status-3-btn" v-if="order.status == 4" v-tap="getgood()">用户已收货</div>
+<div class="status-3-btn" v-if="order.status == 4&&order.payed" v-tap="getgood()">用户已收货</div>
 
 </template>
 
