@@ -68,7 +68,7 @@
     </group>
 </div>
 <div class="status-3-btn" v-if="order.status == 1" v-tap="visit()">已上门</div>
-<div class="status-3-btn" v-if="order.status == 4" v-tap="pay()">已支付</div>
+<div class="status-3-btn" v-if="order.status == 4&&order.payed" v-tap="pay()">已支付</div>
 <div class="status-3-btn" v-if="order.status == 5" v-tap="start()">已开工</div>
 <div class="status-3-btn" v-if="order.status == 6" v-tap="complete()">已完工</div>
 
