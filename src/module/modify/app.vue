@@ -83,9 +83,9 @@ export default {
                     "specialAmount": e.specialAmount
                 })
             })
-            axios.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/uploadList`, JSON.stringify(data)).then((res) => {
+            axios.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/uploadList`, data).then((res) => {
                 alert("更新订单成功")
-                location.href = './zc-order.html?orderNo=${Lib.M.GetRequest().orderNo}'
+                location.href = `./zc-order.html?orderNo=${Lib.M.GetRequest().orderNo}`
             }).catch((res) => {
                 alert("网络连接失败，请重试")
             })
@@ -144,7 +144,7 @@ body {
 }
 .del {
     position: absolute;
-    right: 35px;
+    right: 15px;
     top: 11px;
     height: 28px;
     width: 28px;
@@ -155,7 +155,7 @@ body {
 }
 .add {
     position: absolute;
-    right: 35px;
+    right: 15px;
     top: 11px;
     height: 28px;
     width: 28px;
