@@ -142,6 +142,7 @@ export default {
       orders.map((e)=>{
           count += (e.specialAmount+e.normalAmount)
       })
+      return count
     },
     getTime(timeStamp) {
       var d = new Date(timeStamp*1000);
