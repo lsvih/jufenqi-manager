@@ -56,7 +56,7 @@
       </div>
     </group>
     <group v-if="order.status > 2">
-      <div class="line-2" v-if="order.stageCount !== ''">
+      <div class="line-2" v-if="order.payMethod == 2">
         <div class="line-2-title">分期支付</div>
         <div class="line-2-right" style="color:#393939;">{{order.stageCount}}期</div>
       </div>
@@ -69,7 +69,7 @@
 <div class="status-3-btn" v-if="order.status == 1" v-tap="look()">已查看</div>
 <div class="status-3-btn" v-if="order.status == 2&&(!order.managerUploaded)" v-tap="modify()">去编辑</div>
 <div class="status-3-btn" v-if="order.status == 3" v-tap="pay()">用户已付款</div>
-<div class="status-3-btn" v-if="order.status == 4" v-tap="getgood()">用户已收获</div>
+<div class="status-3-btn" v-if="order.status == 4" v-tap="getgood()">用户已收货</div>
 
 </template>
 
