@@ -68,8 +68,8 @@
     </group>
 </div>
 <div class="status-3-btn" v-if="order.status == 1" v-tap="visit()">已上门</div>
-<div class="status-3-btn" v-if="order.status == 4&&order.payed" v-tap="pay()">已支付</div>
-<div class="status-3-btn" v-if="order.status == 5" v-tap="start()">已开工</div>
+<div class="status-3-btn" v-if="order.status == 4" v-tap="pay()">已支付</div>
+<div class="status-3-btn" v-if="order.status == 5&&order.payed" v-tap="start()">已开工</div>
 <div class="status-3-btn" v-if="order.status == 6" v-tap="complete()">已完工</div>
 
 <!-- <x-button slot="right" style="border-radius:0;background-color:rgb(158, 188, 43);color:#fff;margin:20px 0;width:100%" v-if="order.status==7" onclick="location.href='order-judge.html'">去评价</x-button> -->
