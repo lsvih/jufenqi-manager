@@ -33,7 +33,7 @@
         <div class="line-2-title">特价总额</div>
         <div class="line-2-right" style="color:#88C929;">{{shop.specialAmount|currency "￥" 2}}</div>
       </div>
-      <div class="line-2" style="border-top:5px solid #eee!important;" v-if="status != 0">
+      <div class="line-2" style="border-top:5px solid #eee!important;" v-if="status > 0">
         <div class="line-2-title">总额</div>
         <div class="line-2-right">{{shop.normalAmount+shop.specialAmount|currency "￥" 2}}</div>
       </div>
