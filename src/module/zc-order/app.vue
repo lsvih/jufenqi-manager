@@ -33,12 +33,26 @@
         <div class="line-2-title">特价总额</div>
         <div class="line-2-right" style="color:#88C929;">{{shop.specialAmount|currency "￥" 2}}</div>
       </div>
-      <div class="line-2" style="border-top:5px solid #eee!important;" v-if="status > 0">
+      <div class="line-2" style="border-top:5px solid #eee!important;" v-if="order.status > 1">
         <div class="line-2-title">总额</div>
-        <div class="line-2-right">{{shop.normalAmount+shop.specialAmount|currency "￥" 2}}</div>
+        <div class="line-2-right">{{shop.normalAmount + shop.specialAmount|currency "￥" 2}}</div>
       </div>
       <div class="line-3" v-if="order.status ==1||order.status == 2||order.status ==5">
         <div class="appoint-at" v-if="order.status == 1"><img src="./time.png">{{getTime(order.orderTime)}}</div>
+      </div>
+    </group>
+    <group title="订单总计">
+      <div class="line-2" v-if="order.status > 1">
+        <div class="line-2-title">正价总额</div>
+        <div class="line-2-right" style="color:rgb(255, 204, 102);">{{getCount("normalAmount",order.subOrders)|currency "￥" 2}}</div>
+      </div>
+      <div class="line-2" v-if="order.status > 1">
+        <div class="line-2-title">特价总额</div>
+        <div class="line-2-right" style="color:#88C929;">{{getCount("specialAmount",order.subOrders)|currency "￥" 2}}</div>
+      </div>
+      <div class="line-2" style="border-top:5px solid #eee!important;" v-if="order.status > 1 ">
+        <div class="line-2-title">订单总额</div>
+        <div class="line-2-right">{{getAllCount(order.subOrders)|currency "￥" 2}}</div>
       </div>
     </group>
     <group v-if="order.status > 2">
@@ -116,6 +130,19 @@ export default {
     Cell,
   },
   methods: {
+    getCount(type, orders){
+      let count = 0
+      orders.map((e)=>{
+        count += e[type]
+      })
+      return count
+    },
+    getAllCount(orders){
+      let count = 0
+      orders.map((e)=>{
+          count += (e.specialAmount+e.normalAmount)
+      })
+    },
     getTime(timeStamp) {
       var d = new Date(timeStamp*1000);
       var Y = d.getFullYear() + '-';
