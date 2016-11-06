@@ -28,6 +28,13 @@ import Lib from 'assets/Lib.js'
 import Group from 'vux-components/group'
 import Cell from 'vux-components/cell'
 import XInput from 'vux-components/x-input'
+import axios from 'axios'
+try{
+  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+}catch(e){
+  localStorage.clear()
+  window.location.href = `./wxAuth.html?url=index.html`
+}
 export default {
     data() {
         return {
@@ -40,9 +47,9 @@ export default {
         XInput,
     },
     ready() {
-        this.$http.get(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
+        axios.get(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
             this.order = res.data.data
-        }, (res) => {
+        }).catch((res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
     },
@@ -76,10 +83,10 @@ export default {
                     "specialAmount": e.specialAmount
                 })
             })
-            this.$http.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/uploadList`, JSON.stringify(data)).then((res) => {
+            axios.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/uploadList`, JSON.stringify(data)).then((res) => {
                 alert("更新订单成功")
                 location.href = './zc-order.html?orderNo=${Lib.M.GetRequest().orderNo}'
-            }, (res) => {
+            }).catch((res) => {
                 alert("网络连接失败，请重试")
             })
         },

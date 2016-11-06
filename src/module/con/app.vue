@@ -63,6 +63,13 @@ import Swiper from 'vux-components/swiper'
 import SwiperItem from 'vux-components/swiper-item'
 import Scroller from 'vux-components/scroller'
 import JFooter from 'components/JFooter.vue'
+import axios from 'axios'
+try{
+  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+}catch(e){
+  localStorage.clear()
+  window.location.href = `./wxAuth.html?url=index.html`
+}
 export default {
     data() {
         return {
@@ -139,29 +146,31 @@ export default {
     ready() {
         let suc_count = 0
         this.index = (Lib.M.GetRequest().type - 1) || 0
-        this.$http.get(`${Lib.C.orderApi}decorationOrders`, {
+        axios.get(`${Lib.C.orderApi}decorationOrders`, {
             params: {
-                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:7`
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:7`,
+                sort: "createdAt,desc"
             }
         }).then((res) => {
             this.zxList = res.data.data
             this.$refs.zx.reset()
-        }, (res) => {
+        }).catch((res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
-        this.$http.get(`${Lib.C.mOrderApi}materialOrders`, {
+        axios.get(`${Lib.C.mOrderApi}materialOrders`, {
             params: {
-                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`,
+                sort: "createdAt,desc"
             }
         }).then((res) => {
             res.data.data.map((e) => {
                 this.zcList.push(e)
             })
             this.$refs.zx.reset()
-        }, (res) => {
+        }).catch((res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
-        this.$http.get(`${Lib.C.mOrderApi}materialSubOrders`, {
+        axios.get(`${Lib.C.mOrderApi}materialSubOrders`, {
             params: {
                 filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`
             }
@@ -170,7 +179,7 @@ export default {
                 this.tkList.push(e)
             })
             this.$refs.tk.reset()
-        }, (res) => {
+        }).catch((res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
 

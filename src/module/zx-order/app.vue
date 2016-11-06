@@ -85,6 +85,13 @@ import XButton from 'vux-components/x-button'
 import Scroller from 'vux-components/scroller'
 import XImg from 'vux-components/x-img'
 import Previewer from 'vux-components/previewer'
+import axios from 'axios'
+try{
+  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+}catch(e){
+  localStorage.clear()
+  window.location.href = `./wxAuth.html?url=index.html`
+}
 export default {
     data() {
         return {
@@ -133,9 +140,9 @@ export default {
         }
     },
     ready() {
-        this.$http.get(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
+        axios.get(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
             this.order = res.data.data
-        }, (res) => {
+        }).catch((res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
     },
@@ -159,34 +166,34 @@ export default {
             return Y + M + D
         },
         visit(){
-          this.$http.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmVisit`).then((res) => {
+          axios.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmVisit`).then((res) => {
               alert("订单已更新！")
               location.reload()
-          }, (res) => {
+          }).catch((res) => {
               alert("更新订单失败，请稍后重试")
           })
         },
         start(){
-          this.$http.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmStart`).then((res) => {
+          axios.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmStart`).then((res) => {
               alert("订单已更新！")
               location.reload()
-          }, (res) => {
+          }).catch((res) => {
               alert("更新订单失败，请稍后重试")
           })
         },
         pay(){
-          this.$http.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmPay`).then((res) => {
+          axios.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmPay`).then((res) => {
               alert("订单已更新！")
               location.reload()
-          }, (res) => {
+          }).catch((res) => {
               alert("更新订单失败，请稍后重试")
           })
         },
         complete(){
-          this.$http.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmComplete`).then((res) => {
+          axios.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmComplete`).then((res) => {
               alert("订单已更新！")
               location.reload()
-          }, (res) => {
+          }).catch((res) => {
               alert("更新订单失败，请稍后重试")
           })
         }

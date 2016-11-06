@@ -63,6 +63,13 @@
 import Lib from 'assets/Lib.js'
 import Group from 'vux-components/group'
 import Cell from 'vux-components/cell'
+import axios from 'axios'
+try{
+  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+}catch(e){
+  localStorage.clear()
+  window.location.href = `./wxAuth.html?url=index.html`
+}
 export default {
   data() {
     return {
@@ -117,26 +124,26 @@ export default {
       return Y + M + D
     },
     look(){
-      this.$http.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/confirmVisit`).then((res) => {
+      axios.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/confirmVisit`).then((res) => {
           alert("订单已更新！")
           location.reload()
-      }, (res) => {
+      }).catch((res) => {
           alert("更新订单失败，请稍后重试")
       })
     },
     pay(){
-      this.$http.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/confirmPay`).then((res) => {
+      axios.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/confirmPay`).then((res) => {
           alert("订单已更新！")
           location.reload()
-      }, (res) => {
+      }).catch((res) => {
           alert("更新订单失败，请稍后重试")
       })
     },
     getgood(){
-      this.$http.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/confirmReceive`).then((res) => {
+      axios.post(`${Lib.C.mOrderApi}materialOrders/${Lib.M.GetRequest().orderNo}/confirmReceive`).then((res) => {
           alert("订单已更新！")
           location.reload()
-      }, (res) => {
+      }).catch((res) => {
           alert("更新订单失败，请稍后重试")
       })
     },

@@ -41,7 +41,10 @@ export default {
             return Lib.M.GetThisPage() == page
         },
         gotoPage(page) {
-            location.href = page + ".html"
+          if(page == "my"){
+            return
+          }
+          location.href = page + ".html"
         }
     },
     ready() {
