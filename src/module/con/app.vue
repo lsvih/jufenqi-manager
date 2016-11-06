@@ -172,7 +172,8 @@ export default {
         })
         axios.get(`${Lib.C.mOrderApi}materialSubOrders`, {
             params: {
-                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:5`,
+                sort: "createdAt,desc"
             }
         }).then((res) => {
             res.data.data.map((e) => {
