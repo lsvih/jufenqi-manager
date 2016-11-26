@@ -11,22 +11,10 @@
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:zx>
-                    <div>
-                        <div class="order" v-for="order in zxList" v-tap="viewDetail('zx',order.orderNo)">
-                            <img :src="order.customerImage">
-                            <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
-                            <div class="name">{{order.customerName}}</div>
-                            <div class="status">{{zxStatusList[order.status].name}}</div>
-                        </div>
-                        <div class="order" v-for="order in zcList" v-tap="viewDetail('zc',order.orderNo)">
-                            <img :src="order.customerImage">
-                            <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
-                            <div class="name">{{order.customerName}}</div>
-                            <div class="status">{{zcStatusList[order.status].name}}</div>
-                        </div>
-                    </div>
-                    <div v-if="zxList.length + zcList.length ==0">
-                        <div class="no-data"><img src="no-data.png"><span>暂无订单</span></div>
+                    <no-data v-if="zxList.length + zcList.length ==0"></no-data>
+                    <div v-else>
+                        <j-order-block :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :status="Status.zx[order.status].name" v-for="order in zxList" v-tap="viewDetail('zx',order.orderNo)"></j-order-block>
+                        <j-order-block :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :status="Status.zc[order.status].name" v-for="order in zcList" v-tap="viewDetail('zc',order.orderNo)"></j-order-block>
                     </div>
                 </scroller>
             </div>
@@ -34,16 +22,9 @@
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:tk>
-                    <div>
-                        <div class="order" v-for="order in tkList" v-tap="viewDetail('zc',order.orderNo)">
-                            <img :src="order.customerImage">
-                            <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
-                            <div class="name">{{order.customerName}}</div>
-                            <div class="status">{{zcStatusList[order.status].name}}</div>
-                        </div>
-                    </div>
-                    <div v-if="tkList.length==0">
-                        <div class="no-data"><img src="no-data.png"><span>暂无订单</span></div>
+                    <no-data v-if="tkList.length==0"></no-data>
+                    <div v-else>
+                        <j-order-block :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :status="Status.zc[order.status].name" v-for="order in tkList" v-tap="viewDetail('zc',order.orderNo)"></j-order-block>
                     </div>
                 </scroller>
             </div>
@@ -64,72 +45,20 @@ import SwiperItem from 'vux-components/swiper-item'
 import Scroller from 'vux-components/scroller'
 import JFooter from 'components/JFooter.vue'
 import axios from 'axios'
-try{
-  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
-}catch(e){
-  localStorage.clear()
-  window.location.href = `./wxAuth.html?url=index.html`
+import NoData from 'common/components/no-data'
+import Status from 'common/status'
+import JOrderBlock from 'common/components/j-order-block'
+try {
+    axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+} catch (e) {
+    localStorage.clear()
+    window.location.href = `./wxAuth.html?url=index.html`
 }
 export default {
     data() {
         return {
             index: 0,
-            zcStatusList: [{
-                status: 0,
-                name: "订单已删除"
-            }, {
-                status: 1,
-                name: "已预约"
-            }, {
-                status: 2,
-                name: "待确认"
-            }, {
-                status: 3,
-                name: "待付款"
-            }, {
-                status: 4,
-                name: "待收货"
-            }, {
-                status: 5,
-                name: "已收货"
-            }, {
-                status: 6,
-                name: "退款中"
-            }, {
-                status: 7,
-                name: "已退款"
-            }, {
-                status: 8,
-                name: "已取消"
-            }],
-            zxStatusList: [{
-                status: 0,
-                name: "订单已删除"
-            }, {
-                status: 1,
-                name: "已预约"
-            }, {
-                status: 2,
-                name: "已上门"
-            }, {
-                status: 3,
-                name: "待选方案"
-            }, {
-                status: 4,
-                name: "待支付"
-            }, {
-                status: 5,
-                name: "待施工"
-            }, {
-                status: 6,
-                name: "施工中"
-            }, {
-                status: 7,
-                name: "已完工"
-            }, {
-                status: 8,
-                name: "订单已取消"
-            }],
+            Status,
             zxList: [],
             zcList: [],
             tkList: []
@@ -141,7 +70,9 @@ export default {
         Swiper,
         SwiperItem,
         Scroller,
-        JFooter
+        JFooter,
+        JOrderBlock,
+        NoData
     },
     ready() {
         let suc_count = 0
@@ -230,65 +161,5 @@ header {
 .tab-active {
     color: #88C929 !important;
     border-color: #88C929 !important;
-}
-.order {
-    width: calc(~"100% - 15px");
-    height: 80px;
-    background-color: #fff;
-    padding-left: 15px;
-    position: relative;
-    border-bottom: 1px solid #eee;
-    img {
-        position: absolute;
-        top: 10px;
-        left: 15px;
-        width: 60px;
-        height: 60px;
-    }
-    .status {
-        position: absolute;
-        font-size: 12px;
-        color: #393939;
-        bottom: 10px;
-        left: 85px;
-    }
-    .name {
-        position: absolute;
-        font-size: 12px;
-        color: #393939;
-        top: 10px;
-        left: 86px;
-    }
-    .tel {
-        position: absolute;
-        right: 15px;
-        top: 0;
-        height: 80px;
-        line-height: 80px;
-        color: #3BA794;
-    }
-}
-.no-data {
-    position: relative;
-    width: 100%;
-    img {
-        position: absolute;
-        top: 220px;
-        left: calc( ~"50% - 35.5px" );
-        height: 71px;
-        width: 71px;
-    }
-    span {
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 16px;
-        font-size: 16px;
-        line-height: 16px;
-        left: 0;
-        top: 307px;
-        color: #DADADA;
-        text-align: center;
-    }
 }
 </style>
