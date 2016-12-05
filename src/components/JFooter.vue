@@ -19,13 +19,13 @@ export default {
     data() {
         return {
             moduleClass: [{
-                name: '进行中',
+                name: '主材订单',
                 ename: 'index',
                 icon: inIcon,
                 actIcon: inIconAct
             }, {
-                name: '已完成',
-                ename: 'con',
+                name: '装修订单',
+                ename: 'zx',
                 icon: indexIcon,
                 actIcon: indexIconAct
             }, {
