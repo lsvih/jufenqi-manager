@@ -18,7 +18,7 @@
                     <no-data v-if="list0.length==0"></no-data>
                     <div v-else v-for="order in list0">
                         <j-order-block v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                        <div class="operate" :class="{'none':order.status == 2}"><div v-if="order.status == 1" v-tap="visit(order.orderNo)">已上门</div></div>
+                        <div class="operate"><div v-if="order.status == 1" v-tap="(tempOrderNo = order.orderNo,showConfirm.visit = true)">已上门</div></div>
                     </div>
                   </div>
                 </scroller>
@@ -75,6 +75,9 @@
     </swiper>
 </div>
 <j-footer></j-footer>
+<confirm :show.sync="showConfirm.visit" title="" confirm-text="是" cancel-text="否" @on-confirm="visit(tempOrderNo)">
+  <p style="text-align:center;">确认工长已上门?</p>
+</confirm>
 </template>
 
 <script>
@@ -90,6 +93,7 @@ import Scroller from 'vux-components/scroller'
 import JOrderBlock from 'common/components/j-order-block'
 import NoData from 'common/components/no-data'
 import axios from 'axios'
+import Confirm from 'vux-components/confirm'
 import Status from 'common/status'
 try {
     let now = Number(new Date().getTime())
@@ -111,7 +115,11 @@ export default {
             list2: [],
             list3: [],
             list4: [],
-            Status
+            Status,
+            tempOrderNo: null,
+            showConfirm:{
+              visit:false
+            }
         }
     },
     components: {
@@ -122,6 +130,7 @@ export default {
         Scroller,
         JOrderBlock,
         JFooter,
+        Confirm,
         NoData
     },
     ready() {
@@ -138,7 +147,7 @@ export default {
                         this.list0.push(e)
                         break;
                     case 2:
-                        this.list0.push(e)
+                        this.list1.push(e)
                         break;
                     case 3:
                         this.list1.push(e)
