@@ -43,8 +43,8 @@
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listc>
                     <div>
                         <no-data v-if="list2.length==0"></no-data>
-                        <div v-else>
-                            <j-order-block v-for="order in list2" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        <div v-else v-for="order in list2">
+                            <j-order-block v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                             <div class="operate">
                                 <div v-if="order.status == 4" v-tap="(tempOrderNo = order.orderNo,showConfirm.pay = true)">已支付</div>
                             </div>
@@ -58,8 +58,8 @@
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listd>
                     <div>
                         <no-data v-if="list3.length==0"></no-data>
-                        <div v-else>
-                            <j-order-block v-for="order in list3" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        <div v-else v-for="order in list3">
+                            <j-order-block v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                             <div class="operate">
                                 <div v-if="order.status == 5" v-tap="(tempOrderNo = order.orderNo,showConfirm.start = true)">已开工</div>
                             </div>
@@ -73,8 +73,8 @@
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:liste>
                     <div>
                         <no-data v-if="list4.length==0"></no-data>
-                        <div v-else>
-                            <j-order-block v-for="order in list4" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        <div v-else v-for="order in list4">
+                            <j-order-block v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                             <div class="operate">
                                 <div v-if="order.status == 6" v-tap="(tempOrderNo = order.orderNo,showConfirm.complete = true)">已完工</div>
                             </div>
