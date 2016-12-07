@@ -13,52 +13,62 @@
     <swiper :index.sync="index" :height="getScreenHeight()+'px'" :show-dots="false">
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:yy>
+                <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:lista>
+                  <div>
                     <no-data v-if="list0.length==0"></no-data>
                     <div v-else v-for="order in list0">
                         <j-order-block v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                         <div class="operate" :class="{'none':order.status == 2}"><div v-if="order.status == 1" v-tap="visit(order.orderNo)">已上门</div></div>
                     </div>
+                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:dx>
+                <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listb>
+                  <div>
                     <no-data v-if="list1.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list1" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                     </div>
+                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:zf>
+                <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listc>
+                  <div>
                     <no-data v-if="list2.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list2" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                     </div>
+                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:sg>
+                <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listd>
+                  <div>
                     <no-data v-if="list3.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list3" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                     </div>
+                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:sgz>
+                <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:liste>
+                  <div>
                     <no-data v-if="list4.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list4" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                     </div>
+                  </div>
                 </scroller>
             </div>
         </swiper-item>
@@ -146,13 +156,13 @@ export default {
                         break;
                 }
             })
-            setTimeout(() => {
-                this.$refs.yy.reset()
-                this.$refs.dx.reset()
-                this.$refs.zf.reset()
-                this.$refs.sg.reset()
-                this.$refs.sgz.reset()
-            }, 500)
+            this.$nextTick(() => {
+                this.$refs.lista.reset()
+                this.$refs.listb.reset()
+                this.$refs.listc.reset()
+                this.$refs.listd.reset()
+                this.$refs.liste.reset()
+            })
         }).catch((err) => {
             alert("获取订单失败，请稍候再试QAQ")
             throw err
