@@ -14,64 +14,72 @@
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:lista>
-                  <div>
-                    <no-data v-if="list0.length==0"></no-data>
-                    <div v-else v-for="order in list0">
-                        <j-order-block v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                        <div class="operate"><div v-if="order.status == 1" v-tap="(tempOrderNo = order.orderNo,showConfirm.visit = true)">已上门</div></div>
+                    <div>
+                        <no-data v-if="list0.length==0"></no-data>
+                        <div v-else v-for="order in list0">
+                            <j-order-block v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <div class="operate">
+                                <div v-if="order.status == 1" v-tap="(tempOrderNo = order.orderNo,showConfirm.visit = true)">已上门</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listb>
-                  <div>
-                    <no-data v-if="list1.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list1" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list1.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list1" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listc>
-                  <div>
-                    <no-data v-if="list2.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list2" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                          <div class="operate"><div v-if="order.status == 4" v-tap="(tempOrderNo = order.orderNo,showConfirm.pay = true)">已支付</div></div>
+                    <div>
+                        <no-data v-if="list2.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list2" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <div class="operate">
+                                <div v-if="order.status == 4" v-tap="(tempOrderNo = order.orderNo,showConfirm.pay = true)">已支付</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listd>
-                  <div>
-                    <no-data v-if="list3.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list3" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                        <div class="operate"><div v-if="order.status == 5" v-tap="(tempOrderNo = order.orderNo,showConfirm.start = true)">已开工</div></div>
+                    <div>
+                        <no-data v-if="list3.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list3" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <div class="operate">
+                                <div v-if="order.status == 5" v-tap="(tempOrderNo = order.orderNo,showConfirm.start = true)">已开工</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:liste>
-                  <div>
-                    <no-data v-if="list4.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list4" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                        <div class="operate"><div v-if="order.status == 6" v-tap="(tempOrderNo = order.orderNo,showConfirm.complete = true)">已完工</div></div>
+                    <div>
+                        <no-data v-if="list4.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list4" v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <div class="operate">
+                                <div v-if="order.status == 6" v-tap="(tempOrderNo = order.orderNo,showConfirm.complete = true)">已完工</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
@@ -79,16 +87,16 @@
 </div>
 <j-footer></j-footer>
 <confirm :show.sync="showConfirm.visit" title="" confirm-text="是" cancel-text="否" @on-confirm="visit(tempOrderNo)">
-  <p style="text-align:center;">确认工长已上门?</p>
+    <p style="text-align:center;">确认工长已上门?</p>
 </confirm>
 <confirm :show.sync="showConfirm.start" title="" confirm-text="是" cancel-text="否" @on-confirm="start(tempOrderNo)">
-  <p style="text-align:center;">确认工长已开工?</p>
+    <p style="text-align:center;">确认工长已开工?</p>
 </confirm>
 <confirm :show.sync="showConfirm.complete" title="" confirm-text="是" cancel-text="否" @on-confirm="complete(tempOrderNo)">
-  <p style="text-align:center;">确认工长已经完工?</p>
+    <p style="text-align:center;">确认工长已经完工?</p>
 </confirm>
 <confirm :show.sync="showConfirm.pay" title="" confirm-text="是" cancel-text="否" @on-confirm="pay(tempOrderNo)">
-  <p style="text-align:center;">确认用户已经支付?</p>
+    <p style="text-align:center;">确认用户已经支付?</p>
 </confirm>
 </template>
 
@@ -129,11 +137,11 @@ export default {
             list4: [],
             Status,
             tempOrderNo: null,
-            showConfirm:{
-              visit:false,
-              start:false,
-              complete:false,
-              pay:false
+            showConfirm: {
+                visit: false,
+                start: false,
+                complete: false,
+                pay: false
             }
         }
     },
@@ -203,8 +211,8 @@ export default {
             var D = (d.getDate() < 10 ? '0' + (d.getDate()) : d.getDate());
             return Y + M + D
         },
-        viewDetail(type, orderNo, planId) {
-            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+        viewDetail(orderNo) {
+            window.location.href = `zx-order.html?orderNo=${orderNo}`
         },
         visit(orderNo) {
             axios.post(`${Lib.C.orderApi}decorationOrders/${orderNo}/confirmVisit`).then((res) => {
@@ -291,8 +299,8 @@ header {
         margin-left: 20px;
     }
 }
-.none{
+.none {
     height: 0!important;
-    padding: 0!important;
+    padding: 0 !important;
 }
 </style>
