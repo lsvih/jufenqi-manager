@@ -43,6 +43,7 @@
                     <no-data v-if="list2.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list2" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                          <div class="operate"><div v-if="order.status == 4" v-tap="(tempOrderNo = order.orderNo,showConfirm.pay = true)">已支付</div></div>
                     </div>
                   </div>
                 </scroller>
@@ -55,6 +56,7 @@
                     <no-data v-if="list3.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list3" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        <div class="operate"><div v-if="order.status == 5" v-tap="(tempOrderNo = order.orderNo,showConfirm.start = true)">已开工</div></div>
                     </div>
                   </div>
                 </scroller>
@@ -67,6 +69,7 @@
                     <no-data v-if="list4.length==0"></no-data>
                     <div v-else>
                         <j-order-block v-for="order in list4" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        <div class="operate"><div v-if="order.status == 6" v-tap="(tempOrderNo = order.orderNo,showConfirm.complete = true)">已完工</div></div>
                     </div>
                   </div>
                 </scroller>
@@ -77,6 +80,15 @@
 <j-footer></j-footer>
 <confirm :show.sync="showConfirm.visit" title="" confirm-text="是" cancel-text="否" @on-confirm="visit(tempOrderNo)">
   <p style="text-align:center;">确认工长已上门?</p>
+</confirm>
+<confirm :show.sync="showConfirm.start" title="" confirm-text="是" cancel-text="否" @on-confirm="start(tempOrderNo)">
+  <p style="text-align:center;">确认工长已开工?</p>
+</confirm>
+<confirm :show.sync="showConfirm.complete" title="" confirm-text="是" cancel-text="否" @on-confirm="complete(tempOrderNo)">
+  <p style="text-align:center;">确认工长已经完工?</p>
+</confirm>
+<confirm :show.sync="showConfirm.pay" title="" confirm-text="是" cancel-text="否" @on-confirm="pay(tempOrderNo)">
+  <p style="text-align:center;">确认用户已经支付?</p>
 </confirm>
 </template>
 
@@ -118,7 +130,10 @@ export default {
             Status,
             tempOrderNo: null,
             showConfirm:{
-              visit:false
+              visit:false,
+              start:false,
+              complete:false,
+              pay:false
             }
         }
     },
@@ -193,6 +208,30 @@ export default {
         },
         visit(orderNo) {
             axios.post(`${Lib.C.orderApi}decorationOrders/${orderNo}/confirmVisit`).then((res) => {
+                alert("订单已更新！")
+                location.reload()
+            }).catch((res) => {
+                alert("更新订单失败，请稍后重试")
+            })
+        },
+        start(orderNo) {
+            axios.post(`${Lib.C.orderApi}decorationOrders/${orderNo}/confirmStart`).then((res) => {
+                alert("订单已更新！")
+                location.reload()
+            }).catch((res) => {
+                alert("更新订单失败，请稍后重试")
+            })
+        },
+        complete(orderNo) {
+            axios.post(`${Lib.C.orderApi}decorationOrders/${orderNo}/confirmComplete`).then((res) => {
+                alert("订单已更新！")
+                location.reload()
+            }).catch((res) => {
+                alert("更新订单失败，请稍后重试")
+            })
+        },
+        pay(orderNo) {
+            axios.post(`${Lib.C.orderApi}decorationOrders/${orderNo}/confirmPay`).then((res) => {
                 alert("订单已更新！")
                 location.reload()
             }).catch((res) => {
