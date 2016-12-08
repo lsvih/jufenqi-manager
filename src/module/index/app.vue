@@ -14,67 +14,82 @@
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:lista>
-                  <div>
-                    <no-data v-if="list0.length==0"></no-data>
-                    <div v-else v-for="order in list0">
-                        <j-order-block v-tap="viewDetail('zc',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list0.length==0"></no-data>
+                        <div v-else v-for="order in list0">
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listb>
-                  <div>
-                    <no-data v-if="list1.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list1" v-tap="viewDetail('zc',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list1.length==0"></no-data>
+                        <div v-else v-for="order in list1">
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <!-- 在待支付时暂未分单，使用的是appointment -->
+                            <div class="stores">
+                                <div class="store" v-for="store in order.orders">
+                                  <div class="store-name">{{store.storeName}}</div>
+                                  <div class="store-amount">{{store.totalAmount|currency '￥' 2}}</div>
+                                </div>
+                                <div class="stores-amount">总计:{{getStoresAmount(order.orders)|currency '' 2}}</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listc>
-                  <div>
-                    <no-data v-if="list2.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list2" v-tap="viewDetail('zc',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list2.length==0"></no-data>
+                        <div v-else v-for="order in list2">
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listd>
-                  <div>
-                    <no-data v-if="list3.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list3" v-tap="viewDetail('zc',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list3.length==0"></no-data>
+                        <div v-else v-for="order in list3">
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:liste>
-                  <div>
-                    <no-data v-if="list4.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list4" v-tap="viewDetail('zc',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list4.length==0"></no-data>
+                        <div v-else v-for="order in list4">
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <!-- 在待支付时暂未分单，使用的是appointment -->
+                            <div class="stores">
+                                <div class="store" v-for="store in order.orders">
+                                  <div class="store-name">{{store.storeName}}</div>
+                                  <div class="store-amount">{{store.totalAmount|currency '￥' 2}}</div>
+                                </div>
+                                <div class="stores-amount">总计:{{getStoresAmount(order.orders)|currency '' 2}}</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
     </swiper>
 </div>
 <j-footer></j-footer>
-
 </template>
 
 <script>
@@ -113,11 +128,11 @@ export default {
             list4: [],
             Status,
             tempOrderNo: null,
-            showConfirm:{
-              visit:false,
-              start:false,
-              complete:false,
-              pay:false
+            showConfirm: {
+                visit: false,
+                start: false,
+                complete: false,
+                pay: false
             }
         }
     },
@@ -147,7 +162,7 @@ export default {
                         this.list0.push(e)
                         break;
                     case 2:
-                        this.list1.push(e)
+                        this.list4.push(e)
                         break;
                     case 3:
                         this.list1.push(e)
@@ -188,9 +203,16 @@ export default {
             var D = (d.getDate() < 10 ? '0' + (d.getDate()) : d.getDate());
             return Y + M + D
         },
-        viewDetail(type, orderNo, planId) {
-            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+        viewDetail(orderNo, apptNo) {
+            window.location.href = `zc-order.html?orderNo=${orderNo?orderNo:0}&apptNo=${apptNo?apptNo:0}`
         },
+        getStoresAmount(stores){
+          let result = 0
+          stores.map((store)=>{
+            result += store.totalAmount
+          })
+          return result
+        }
     }
 }
 </script>
@@ -244,8 +266,48 @@ header {
         margin-left: 20px;
     }
 }
-.none{
+.none {
     height: 0!important;
-    padding: 0!important;
+    padding: 0 !important;
+}
+
+// 合订单的商店
+
+.stores{
+  background-color: #fff;
+  .store{
+    position: relative;
+    height: 55px;
+    width: calc(~"100% - 15px");
+    margin-left: 15px;
+    border-bottom: 1px solid #eee;
+    .store-name{
+      position: absolute;
+      left:0;
+      top:0;
+      height: 55px;
+      line-height: 55px;
+      font-size: 12px;
+      color:#393939;
+    }
+    .store-amount{
+      position: absolute;
+      right: 15px;
+      top:0;
+      height: 55px;
+      line-height: 55px;
+      font-size: 12px;
+      color:#ec5835;
+    }
+  }
+  .stores-amount{
+      height: 30px;
+      line-height: 30px;
+      padding-right: 15px;
+      text-align: right;
+      font-size: 12px;
+      margin-bottom: 10px;
+      color:#ec5835;
+  }
 }
 </style>
