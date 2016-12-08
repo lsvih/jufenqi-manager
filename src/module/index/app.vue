@@ -3,10 +3,10 @@
     <header>
         <tab active-color='#88C929' :index.sync="index">
             <tab-item class="tab" active-class="tab-active" :selected="index === 0" v-tap="index = 0">已预约</tab-item>
-            <tab-item class="tab" active-class="tab-active" :selected="index === 1" v-tap="index = 1">待选方案</tab-item>
-            <tab-item class="tab" active-class="tab-active" :selected="index === 2" v-tap="index = 2">待支付</tab-item>
-            <tab-item class="tab" active-class="tab-active" :selected="index === 3" v-tap="index = 3">待施工</tab-item>
-            <tab-item class="tab" active-class="tab-active" :selected="index === 4" v-tap="index = 4">施工中</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 1" v-tap="index = 1">待支付</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 2" v-tap="index = 2">待确认</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 3" v-tap="index = 3">待收货</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 4" v-tap="index = 4">继续支付</tab-item>
         </tab>
     </header>
 
