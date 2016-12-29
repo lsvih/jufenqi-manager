@@ -62,6 +62,14 @@
                         <no-data v-if="list3.length==0"></no-data>
                         <div v-else v-for="order in list3">
                             <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <!-- 家装助手（管家端）待支付 -->
+                            <div class="stores">
+                                <div class="store" v-for="store in order.orders">
+                                  <div class="store-name">{{store.storeName}}</div>
+                                  <div class="store-amount">{{store.totalAmount|currency '￥' 2}}</div>
+                                </div>
+                                <div class="stores-amount">总计:{{getStoresAmount(order.orders)|currency '' 2}}</div>
+                            </div>
                         </div>
                     </div>
                 </scroller>
