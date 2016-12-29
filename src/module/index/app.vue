@@ -62,7 +62,7 @@
                         <no-data v-if="list3.length==0"></no-data>
                         <div v-else v-for="order in list3">
                             <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                            <!-- 家装助手（管家端）待支付 -->
+                            <!-- 家装助手（管家端）待收货 -->
                             <div class="stores">
                                 <div class="store" v-for="store in order.orders">
                                   <div class="store-name">{{store.storeName}}</div>
@@ -159,7 +159,7 @@ export default {
         this.index = (Lib.M.GetRequest().type - 1) || 0
         axios.get(`${Lib.C.mOrderApi}materialAppts`, {
             params: {
-                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`,
+                filter: `customerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`,
                 sort: 'createdAt,DESC',
                 size: 1000
             }
