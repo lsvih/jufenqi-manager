@@ -16,6 +16,7 @@
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:lista>
                     <div>
                         <no-data v-if="list0.length==0"></no-data>
+                        <!-- 1 已预约 list0 Appts -->
                         <div v-else v-for="order in list0">
                             <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                         </div>
@@ -30,7 +31,7 @@
                         <no-data v-if="list1.length==0"></no-data>
                         <div v-else v-for="order in list1">
                             <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                            <!-- 在待支付时暂未分单，使用的是appointment -->
+                            <!-- 在待支付时暂未分单，使用的是appointment 3 待支付 list1 Appts-->
                             <div class="stores">
                                 <div class="store" v-for="store in order.orders">
                                   <div class="store-name">{{store.storeName}}</div>
@@ -48,8 +49,9 @@
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:listc>
                     <div>
                         <no-data v-if="list2.length==0"></no-data>
+                        <!-- 4 待确认 list2 Orders-->
                         <div v-else v-for="order in list2">
-                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.appt.customerImage" :name="order.appt.customerName" :tel="order.appt.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                         </div>
                     </div>
                 </scroller>
@@ -61,14 +63,14 @@
                     <div>
                         <no-data v-if="list3.length==0"></no-data>
                         <div v-else v-for="order in list3">
-                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                            <!-- 家装助手（管家端）待收货 -->
+                            <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.appt.customerImage" :name="order.appt.customerName" :tel="order.appt.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                            <!-- 家装助手（管家端）5 待收货 list3 Orders-->
                             <div class="stores">
-                                <div class="store" v-for="store in order.orders">
+                                <div class="store" v-for="store in list3">
                                   <div class="store-name">{{store.storeName}}</div>
                                   <div class="store-amount">{{store.totalAmount|currency '￥' 2}}</div>
                                 </div>
-                                <div class="stores-amount">总计:{{getStoresAmount(order.orders)|currency '' 2}}</div>
+                                <div class="stores-amount">总计:{{getStoresAmount(list3)|currency '' 2}}</div>
                             </div>
                         </div>
                     </div>
@@ -80,9 +82,9 @@
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:liste>
                     <div>
                         <no-data v-if="list4.length==0"></no-data>
-                        <div v-else v-for="order in list4">
+                        <div v-else v-for="order in list5">
                             <j-order-block v-tap="viewDetail(order.orderNo,order.apptNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                            <!-- 在待支付时暂未分单，使用的是appointment -->
+                            <!-- 在待支付时暂未分单，使用的是appointment 2 继续支付 list5 Appts-->
                             <div class="stores">
                                 <div class="store" v-for="store in order.orders">
                                   <div class="store-name">{{store.storeName}}</div>
@@ -134,6 +136,7 @@ export default {
             list2: [],
             list3: [],
             list4: [],
+            list5: [],
             Status,
             tempOrderNo: null,
             showConfirm: {
@@ -159,7 +162,7 @@ export default {
         this.index = (Lib.M.GetRequest().type - 1) || 0
         axios.get(`${Lib.C.mOrderApi}materialAppts`, {
             params: {
-                filter: `customerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`,
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,3]`,
                 sort: 'createdAt,DESC',
                 size: 1000
             }
@@ -170,7 +173,49 @@ export default {
                         this.list0.push(e)
                         break;
                     case 2:
+                        this.list5.push(e)
+                        break;
+                    case 3:
+                        this.list1.push(e)
+                        break;
+                    case 4:
+                        this.list2.push(e)
+                        break;
+                    case 5:
+                        this.list3.push(e)
+                        break;
+                    case 6:
                         this.list4.push(e)
+                        break;
+                    default:
+                        break;
+                }
+            })
+            this.$nextTick(() => {
+                this.$refs.lista.reset()
+                this.$refs.listb.reset()
+                this.$refs.listc.reset()
+                this.$refs.listd.reset()
+                this.$refs.liste.reset()
+            })
+        }).catch((err) => {
+            alert("获取订单失败，请稍候再试QAQ")
+            throw err
+        })
+        axios.get(`${Lib.C.mOrderApi}materialOrders`, {
+            params: {
+                filter: `managerId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[4,6]`,
+                sort: 'createdAt,DESC',
+                size: 1000
+            }
+        }).then((res) => {
+            res.data.data.map((e) => {
+                switch (e.status) {
+                    case 1:
+                        this.list0.push(e)
+                        break;
+                    case 2:
+                        this.list5.push(e)
                         break;
                     case 3:
                         this.list1.push(e)
