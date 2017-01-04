@@ -60,8 +60,8 @@
                         <no-data v-if="list3.length==0"></no-data>
                         <div v-else v-for="order in list3">
                             <j-order-block v-tap="viewDetail(order.orderNo)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
-                            <div class="operate" v-if="order.status == 5">
-                                <div v-if="order.status == 5" v-tap="(tempOrderNo = order.orderNo,showConfirm.start = true)">已开工</div>
+                            <div class="operate" v-if="order.status == 5&&order.payed">
+                                <div v-if="order.status == 5&&order.payed" v-tap="(tempOrderNo = order.orderNo,showConfirm.start = true)">已开工</div>
                             </div>
                         </div>
                     </div>
